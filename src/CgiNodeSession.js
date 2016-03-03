@@ -76,13 +76,18 @@ function CgiHttpSession(request, response)
 		// If the file does not exist then create another ID.
 		if (!FS.existsSync(path)) this.id = this.create();
 
-		// Load the session information.
-		// TODO: handle exceptions, if occurs create new session.
-		var session = JSON.parse( FS.readFileSync( Path.join(CgiNodeConfig.SessionPath, this.id) ) );
-		
-		// Ensure the session is actually the requester's session. 
-		// TODO: create new session if this occurs. Don't throw exception.
-		if (session.ipAddress != request.server.remote_addr) throw "Invalid session ID!";
+		var session;
+		try {
+			// Load the session information.
+			session = JSON.parse( FS.readFileSync( Path.join(CgiNodeConfig.SessionPath, this.id) ) );
+			
+			// Ensure the session is actually the requester's session. 
+			if (session.ipAddress != request.server.remote_addr) throw "Invalid session ID!";
+		} catch(err) {
+			self.cleanUp();
+			self.id = self.create();
+			session = JSON.parse( FS.readFileSync( Path.join(CgiNodeConfig.SessionPath, this.id) ) );
+		}
 
 		// Copy the session object data into this object.
 		for (name in session) this[name] = session[name];
