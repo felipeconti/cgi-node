@@ -71,7 +71,7 @@ cgiNodeContext = new CgiHttpContext();
 var onReady = function() { cgiNodeContext.include(process.env.PATH_TRANSLATED); };
 
 // TODO: remove this when the POST parser is done.
-cgiNodeContext.request.method = 'GET';
+// cgiNodeContext.request.method = 'GET';
 
 // If the HTTP method is a 'POST' then read the post data. Otherwise process is ready.
 if (cgiNodeContext.request.method != 'POST') onReady();
