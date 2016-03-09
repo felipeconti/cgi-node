@@ -45,6 +45,16 @@ function CgiHttpResponse()
 	this.isHeaderSent = false;
 
 	/*
+	Defines the status code of response
+	*/
+	this.statusCode = 200;
+
+	/*
+	Defines the status message of response
+	*/
+	this.statusMessage = "OK";
+
+	/*
 	 This object defines the list of name/value header of the HTTP headers. These can be manipulated directly
 	 by the caller. Set, get, remove methods are not required send the caller can access the header object directly.
 
@@ -67,6 +77,9 @@ function CgiHttpResponse()
 
 		// Set the header as sent and send it.
 		self.isHeaderSent = true; 
+
+		// Set status code and message of rsponse
+		process.stdout.write( 'Status: ' + self.statusCode + ' ' + self.statusMessage + '\r\n');
 
 		// Traverse the headers and output them 
 		for (var name in self.headers) process.stdout.write( name + ':' + self.headers[name] + '\r\n');
